@@ -89,7 +89,7 @@ radio.onReceivedValue(function (name, value) {
                 `)
         } else if (code == 1011) {
             basic.showLeds(`
-                # . . # .
+                # # . # .
                 . . . . .
                 . . . . .
                 . . . . .

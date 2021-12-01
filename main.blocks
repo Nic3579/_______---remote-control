@@ -59,7 +59,7 @@
         . . . . . 
         . . . . .
         `</field></block></statement><value name="IF10"><block type="logic_compare" id="yx+vXHs}Sk16{ObT/97S"><field name="OP">EQ</field><value name="A"><shadow type="math_number"><field name="NUM">0</field></shadow><block type="variables_get" id="/D)3Jk=GT1TNO;qJ3yW="><field name="VAR" id="m0?l+yy/)cMeQ4MKxdcE">code</field></block></value><value name="B"><shadow type="math_number" id="W1:|WE:CByM/~hmo[9DY"><field name="NUM">1011</field></shadow></value></block></value><statement name="DO10"><block type="device_show_leds" id="#YZQVETX!0bSV{J-(+[3"><field name="LEDS">`
-        # . . # . 
+        # # . # . 
         . . . . . 
         . . . . . 
         . . . . . 
