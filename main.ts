@@ -1,12 +1,21 @@
 input.onButtonPressed(Button.A, function () {
     radio.sendValue("rz557g", 2473 * 3821)
+    alarm = 0
 })
 input.onButtonPressed(Button.B, function () {
     radio.sendValue("rz557g", 2897 * 3821)
 })
 radio.onReceivedValue(function (name, value) {
-    if (name == "") {
+    // 1st security measure - has to have correct name
+    // AND
+    // 2nd security measure - number that are too big are filtered out
+    if (name == "" && (code > 0 && code <= 11112)) {
+        // decodes the message
         code = value + 4021
+        // if code > 0
+        // check value of 'code'
+        // else
+        // all is good
         if (code > 0) {
             if (code == 1) {
                 basic.showLeds(`
@@ -257,6 +266,7 @@ radio.onReceivedValue(function (name, value) {
                     . . . . .
                     `)
             }
+            alarm = 1
         } else {
             ready = 1
             basic.clearScreen()
@@ -264,10 +274,13 @@ radio.onReceivedValue(function (name, value) {
     }
 })
 let code = 0
+let alarm = 0
 let ready = 0
 radio.setGroup(1)
 ready = 1
+alarm = 0
 basic.forever(function () {
+    // turns it off when the alarm is activated
     if (ready == 1) {
         basic.showLeds(`
             . . . . .
@@ -284,5 +297,11 @@ basic.forever(function () {
             . . . . .
             `)
         basic.pause(200)
+    }
+    if (alarm == 1) {
+        music.playTone(294, music.beat(BeatFraction.Whole))
+        music.rest(music.beat(BeatFraction.Sixteenth))
+        music.playTone(659, music.beat(BeatFraction.Whole))
+        music.rest(music.beat(BeatFraction.Sixteenth))
     }
 })
