@@ -1,7 +1,14 @@
+radio.onReceivedNumber(function (receivedNumber) {
+    if (receivedNumber == _ * 3624) {
+        timer_on = 0
+    }
+})
+// turns off a alarm
 input.onButtonPressed(Button.A, function () {
     radio.sendValue("rz557g", 2473 * 3821)
     alarm = 0
 })
+// toggles weather the alarm is enabled/disbled
 input.onButtonPressed(Button.B, function () {
     radio.sendValue("rz557g", 2897 * 3821)
 })
@@ -9,7 +16,7 @@ radio.onReceivedValue(function (name, value) {
     // 1st security measure - has to have correct name
     // AND
     // 2nd security measure - number that are too big are filtered out
-    if (name == "" && (code > 0 && code <= 11112)) {
+    if (name == "abtd" && (code > 0 && code <= 11112)) {
         // decodes the message
         code = value + 4021
         // if code > 0
@@ -17,6 +24,7 @@ radio.onReceivedValue(function (name, value) {
         // else
         // all is good
         if (code > 0) {
+            // turns on the correct lights to tell teh user what set off the alarm
             if (code == 1) {
                 basic.showLeds(`
                     # . . . .
@@ -268,15 +276,20 @@ radio.onReceivedValue(function (name, value) {
             }
             alarm = 1
         } else {
+            // resets the alarm if there is nothing set off
+            alarm = 0
             ready = 1
             basic.clearScreen()
         }
     }
 })
+let timer = 0
 let code = 0
+let timer_on = 0
+let _ = 0
 let alarm = 0
 let ready = 0
-radio.setGroup(1)
+radio.setGroup(17)
 ready = 1
 alarm = 0
 basic.forever(function () {
@@ -296,12 +309,25 @@ basic.forever(function () {
             . . . . .
             . . . . .
             `)
-        basic.pause(200)
     }
+    // plays sound if the alarm is on
     if (alarm == 1) {
         music.playTone(294, music.beat(BeatFraction.Whole))
         music.rest(music.beat(BeatFraction.Sixteenth))
         music.playTone(659, music.beat(BeatFraction.Whole))
-        music.rest(music.beat(BeatFraction.Sixteenth))
     }
+    if (timer_on == 1) {
+        timer = timer - 1
+    }
+    if (timer == 0) {
+        timer_on = 0
+        alarm = 1
+    }
+    basic.pause(200)
+})
+loops.everyInterval(12000, function () {
+    _ = randint(2, 99)
+    radio.sendNumber(_)
+    timer_on = 1
+    timer = 30
 })
