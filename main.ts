@@ -12,13 +12,14 @@ input.onButtonPressed(Button.A, function () {
 input.onButtonPressed(Button.B, function () {
     radio.sendValue("rz557g", 2897 * 3821)
 })
+// this decodes an alarm signal
 radio.onReceivedValue(function (name, value) {
     // 1st security measure - has to have correct name
     // AND
     // 2nd security measure - number that are too big are filtered out
     if (name == "abtd" && (code > 0 && code <= 11112)) {
         // decodes the message
-        code = value + 4021
+        code = (value + 4021) / 2
         // if code > 0
         // check value of 'code'
         // else
@@ -292,6 +293,9 @@ let ready = 0
 radio.setGroup(17)
 ready = 1
 alarm = 0
+pins.setAudioPin(AnalogPin.P0)
+music.setVolume(255)
+music.playTone(262, music.beat(BeatFraction.Whole))
 basic.forever(function () {
     // turns it off when the alarm is activated
     if (ready == 1) {
@@ -318,10 +322,10 @@ basic.forever(function () {
     }
     if (timer_on == 1) {
         timer = timer - 1
-    }
-    if (timer == 0) {
-        timer_on = 0
-        alarm = 1
+        if (timer == 0) {
+            timer_on = 0
+            alarm = 1
+        }
     }
     basic.pause(200)
 })
